@@ -1,6 +1,8 @@
+const { logger } = require('../winston');
 
 var db = require('../models/index');
 const directors = db.directors;
+// logger.info('fghjhbhj')
 
 // GET all Directors
 const getAllDirectors = (req, res) => {
@@ -9,6 +11,7 @@ const getAllDirectors = (req, res) => {
       res.status(200).send(data);
 
     }).catch((err) => {
+      logger.error(err);
       res.status(500).send(err);
 
     });
@@ -22,9 +25,17 @@ const getDirectorById = (req, res) => {
     },
   })
     .then((data) => {
-      (data.length > 0) ? res.status(200).send(data) : res.sendStatus(404);
+      if (data.length > 0) {
+        res.status(200).send(data)
+      } else {
+        res.status(404).send('data not found');
+        logger.error({
+          message: 'Directors ID not found'
+        });
+      } 
     }).catch((err) => {
-      res.status(500).send(err);
+      logger.error(err);
+      res.sendStatus(500);
     });
 };
 
@@ -34,11 +45,19 @@ const addDirector = (req, res) => {
   const dir = {
     director_name: body.director
   };
+  if(dir.director_name===undefined){
+    logger.error({
+      message: 'Data Insufficient.'
+    });
+  res.status(404).send('Enter sufficient Data');}
+  else{
   directors.create(dir).then((data) => {
     res.status(202).send(`Last person added whose id is: ${data.id}`);
-  }).catch(() => {
+  }).catch((err) => {
+    logger.error(err);
     res.sendStatus(500);
   });
+}
 
 }
 
@@ -52,6 +71,9 @@ const updateDirectorById = (req, res) => {
     .then((data) => {
 
       if (data[0] === 0) {
+        logger.error({
+          message: 'Data not found'
+        });
         res.sendStatus(404);
       } else {
         res.sendStatus(202);
@@ -71,8 +93,13 @@ const deleteDirectorById = (req, res) => {
   ).then((data) => {
     if (data === 1) {
       res.status(202).send(`Person data deleted, who's ID is: ${req.params.directorId}`);
-    } else { res.sendStatus(404); }
-  }).catch(() => {
+    } else { 
+      logger.error({
+        message:'Data not found for Delete.'
+      })
+      res.sendStatus(404); }
+  }).catch((err) => {
+    logger.error(err);
     res.sendStatus(500);
   });
 }
