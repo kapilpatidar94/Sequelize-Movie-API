@@ -2,7 +2,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('movies', {
-      
       rank: {
         allowNull: false,
         autoIncrement: true,

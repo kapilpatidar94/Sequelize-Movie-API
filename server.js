@@ -4,35 +4,32 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.listen(8081);
+app.listen(8080);
 
 const {
-  getAllMovies,
-  addMovie,
-  getMovieById,
-  updateMovieById,
-  deleteMovieById,
-} = require('./express/movies');
+    getAllDirectors,
+    getDirectorById,
+    addDirector,
+    updateDirectorById,
+    deleteDirectorById,
+} = require('./getFunction/getDirectorsInfo');
+
+app.get('/directors', getAllDirectors)
+    .get('/directors/:directorId', getDirectorById)
+    .post('/directors', addDirector)
+    .put('/directors/:directorId', updateDirectorById)
+    .delete('/directors/:directorId', deleteDirectorById);
+
 const {
-  getAllDirectors,
-  addDirector,
-  getDirectorById,
-  updateDirectorById,
-  deleteDirectorById,
-} = require('./express/directors');
+    getAllMovies,
+    getMovieById,
+    addMovie,
+    updateMovieById,
+    deleteMovieById,
+} = require('./getFunction/getMoviesInfo');
 
-app.get('/', (request, response) => {
-  response.send('Hello World!');
-});
-
-app.get('/api/movies', getAllMovies)
-  .post('/api/movies', addMovie)
-  .get('/api/movies/:movieId', getMovieById)
-  .put('/api/movies/:movieId', updateMovieById)
-  .delete('/api/movies/:movieId', deleteMovieById);
-
-app.get('/api/directors', getAllDirectors)
-  .post('/api/directors', addDirector)
-  .get('/api/directors/:directorId', getDirectorById)
-  .put('/api/directors/:directorId', updateDirectorById)
-  .delete('/api/directors/:directorId', deleteDirectorById);
+app.get('/movies', getAllMovies)
+    .get('/movies/:movieId', getMovieById)
+    .post('/movies', addMovie)
+    .put('/movies/:movieId', updateMovieById)
+    .delete('/movies/:movieId', deleteMovieById);
