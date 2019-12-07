@@ -11,9 +11,7 @@ const getAllMovies = (req, res) => {
 
     }).catch((err) => {
       res.status(500).send(err);
-      logger.error({
-        message: 'Server Error.'
-      });
+      logger.error(err.stack);
 
     });
 }
@@ -37,9 +35,7 @@ const getMovieById = (req, res) => {
       }
     }).catch((err) => {
       res.status(500).send(err);
-      logger.error({
-        message: 'Server Error.'
-      });
+      logger.error(err.stack);
     });
 
 }
@@ -65,9 +61,7 @@ const addMovie = (req, res) => {
     res.status(202).send(`Last person added whose rank is: ${data.null}`);
   }).catch(() => {
     res.sendStatus(500);
-    logger.error({
-      message: 'Server Error'
-    });
+    logger.error(err.stack);
   });
 }
 
@@ -99,8 +93,9 @@ const updateMovieById = (req, res) => {
       } else {
         res.sendStatus(202);
       }
-    }).catch(() => {
+    }).catch((err) => {
       res.sendStatus(500);
+      logger.error(err.stack);
     });
 }
 
@@ -122,8 +117,9 @@ const deleteMovieById = (req, res) => {
         }
       ); 
     }
-  }).catch(() => {
+  }).catch((err) => {
     res.sendStatus(500);
+    logger.error(err.stack);
   });
 }
 

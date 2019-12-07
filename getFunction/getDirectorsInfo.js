@@ -11,7 +11,7 @@ const getAllDirectors = (req, res) => {
       res.status(200).send(data);
 
     }).catch((err) => {
-      logger.error(err);
+      logger.error(err.stack);
       res.status(500).send(err);
 
     });
@@ -34,7 +34,7 @@ const getDirectorById = (req, res) => {
         });
       } 
     }).catch((err) => {
-      logger.error(err);
+      logger.error(err.stack);
       res.sendStatus(500);
     });
 };
@@ -54,7 +54,7 @@ const addDirector = (req, res) => {
   directors.create(dir).then((data) => {
     res.status(202).send(`Last person added whose id is: ${data.id}`);
   }).catch((err) => {
-    logger.error(err);
+    logger.error(err.stack);
     res.sendStatus(500);
   });
 }
@@ -78,7 +78,8 @@ const updateDirectorById = (req, res) => {
       } else {
         res.sendStatus(202);
       }
-    }).catch(() => {
+    }).catch((err) => {
+      logger.error(err.stack);
       res.sendStatus(500);
     });
 }
@@ -99,7 +100,7 @@ const deleteDirectorById = (req, res) => {
       })
       res.sendStatus(404); }
   }).catch((err) => {
-    logger.error(err);
+    logger.error(err.stack);
     res.sendStatus(500);
   });
 }
